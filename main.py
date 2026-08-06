@@ -7,12 +7,12 @@ from datetime import datetime
 import pytz
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID   = "7033849146"
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
 SUPABASE_URL = "https://kqkxulsuevfuhmuvhxsp.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtxa3h1bHN1ZXZmdWhtdXZoeHNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NjYxMTYsImV4cCI6MjA5MTM0MjExNn0.dwPtvv9lvu_urSgno57Iu4POAKP2qANbSw5fKEcscdE"
-USER_ID = "f06f69b1-34ed-4fe5-848a-0225bef23fd7"
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
+USER_ID = os.environ.get("USER_ID", "")
 
 NOMES = {
     "FBTC": "Fidelity BTC",
