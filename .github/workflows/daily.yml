@@ -1,4 +1,4 @@
-name: ClawETF Daily Analysis
+name: ClawETF Daily v2
 
 on:
   schedule:
