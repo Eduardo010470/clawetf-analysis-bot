@@ -97,7 +97,7 @@ def gerar_relatorio():
         seta = "ACIMA" if preco >= dca else "ABAIXO"
         linhas_ativos.append(
             seta + " " + ticker + " (" + nome + ")\n"
-            "   Cotacao: $ " + str(preco) + "\n"
+            "   Preco da cota: $ " + str(preco) + "\n"
             "   Valor: $ " + str(round(atual,2)) + "  " + emoji_pl + " P&L: $ " + str(round(pl,2)) + " (" + str(round(pl_pct,2)) + "%)"
         )
         dados_ativos.append({
@@ -141,11 +141,11 @@ def enviar_telegram(mensagem):
 def analisar_com_claude(relatorio, dados):
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     contexto = "\n".join([
-        "- " + d["nome"] + " (" + d["ticker"] + "): cotacao $" + str(d["preco"]) +
+        "- " + d["nome"] + " (" + d["ticker"] + "): preco da cota $" + str(d["preco"]) +
         ", DCA $" + str(d["dca"]) + ", P&L " + str(d["pl_pct"]) + "%, valor $" + str(d["atual"])
         for d in dados
     ])
-    prompt = "Voce e um assistente financeiro analisando carteira de cripto ETFs de Eduardo, medico brasileiro, DCA longo prazo via Avenue/Nomad.\n\nRELATORIO:\n" + relatorio + "\n\nDADOS:\n" + contexto + "\n\nAnalise CONCISA max 300 palavras: 1) Situacao geral 2) Destaques do dia 3) Sugestao rebalanceamento 4) Sugestao aporte se houver capital 5) Perspectiva mercado. Seja direto e honesto sem otimismo excessivo."
+    prompt = "Voce e um assistente financeiro analisando carteira de cripto ETFs de Eduardo, medico brasileiro, DCA longo prazo via Avenue/Nomad.\n\nRELATORIO:\n" + relatorio + "\n\nDADOS:\n" + contexto + "\n\nIMPORTANTE: os precos acima sao precos da COTA de cada ETF na NASDAQ, nao a cotacao do ativo subjacente. O preco de uma cota de FBTC ou IBIT nao e o preco do Bitcoin, e o de ETHA ou FETH nao e o preco do Ethereum. Nunca apresente esses numeros como cotacao de BTC ou ETH nem estime a cotacao do ativo a partir deles.\n\nAnalise CONCISA max 300 palavras: 1) Situacao geral 2) Destaques do dia 3) Sugestao rebalanceamento 4) Sugestao aporte se houver capital 5) Perspectiva mercado. Seja direto e honesto sem otimismo excessivo."
     try:
         response = client.messages.create(
             model="claude-opus-4-6",
