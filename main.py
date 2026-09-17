@@ -145,7 +145,16 @@ def analisar_com_claude(relatorio, dados):
         ", DCA $" + str(d["dca"]) + ", P&L " + str(d["pl_pct"]) + "%, valor $" + str(d["atual"])
         for d in dados
     ])
-    prompt = "Voce e um assistente financeiro analisando carteira de cripto ETFs de Eduardo, medico brasileiro, DCA longo prazo via Avenue/Nomad.\n\nRELATORIO:\n" + relatorio + "\n\nDADOS:\n" + contexto + "\n\nIMPORTANTE: os precos acima sao precos da COTA de cada ETF na NASDAQ, nao a cotacao do ativo subjacente. O preco de uma cota de FBTC ou IBIT nao e o preco do Bitcoin, e o de ETHA ou FETH nao e o preco do Ethereum. Nunca apresente esses numeros como cotacao de BTC ou ETH nem estime a cotacao do ativo a partir deles.\n\nAnalise CONCISA max 300 palavras: 1) Situacao geral 2) Destaques do dia 3) Sugestao rebalanceamento 4) Sugestao aporte se houver capital 5) Perspectiva mercado. Seja direto e honesto sem otimismo excessivo."
+    btt = get_preco("BTC-USD")
+    ett = get_preco("ETH-USD")
+    spot_str = ""
+    if btt > 0 or ett > 0:
+        spot_str = "\n\nCOTACOES SPOT DO ATIVO SUBJACENTE (USE ESTES NUMEROS ao falar do mercado; nao estime a cotacao a partir do preco da cota do ETF):"
+        if btt > 0:
+            spot_str += "\n- Bitcoin (BTC): $" + str(btt)
+        if ett > 0:
+            spot_str += "\n- Ethereum (ETH): $" + str(ett)
+    prompt = "Voce e um assistente financeiro analisando carteira de cripto ETFs de Eduardo, medico brasileiro, DCA longo prazo via Avenue/Nomad.\n\nRELATORIO:\n" + relatorio + "\n\nDADOS:\n" + contexto + spot_str + "\n\nIMPORTANTE: os precos acima sao precos da COTA de cada ETF na NASDAQ, nao a cotacao do ativo subjacente. O preco de uma cota de FBTC ou IBIT nao e o preco do Bitcoin, e o de ETHA ou FETH nao e o preco do Ethereum. Nunca apresente esses numeros como cotacao de BTC ou ETH nem estime a cotacao do ativo a partir deles.\n\nAnalise CONCISA max 300 palavras: 1) Situacao geral 2) Destaques do dia 3) Sugestao rebalanceamento 4) Sugestao aporte se houver capital 5) Perspectiva mercado. Seja direto e honesto sem otimismo excessivo."
     try:
         response = client.messages.create(
             model="claude-opus-4-6",
